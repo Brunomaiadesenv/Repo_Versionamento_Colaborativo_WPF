@@ -51,9 +51,23 @@
                 Height="30"
                 Click="BtnConcluida_OnClick"
                 Margin="0,0,10,5" />
+            
+            <Button x:Name="BtnExportarTxt"
+                    Content="Exportar TXT"
+                    Width="120"
+                    Height="30"
+                    Click="BtnExportarTxt_Click" />
 
+            <Button x:Name="BtnImportarTxt"
+                    Content="Importar TXT"
+                    Width="120"
+                    Height="30"
+                    Click="BtnImportarTxt_Click" />
+
+
+            
         </StackPanel>
-
+        
         <!-- Lista -->
         <ListBox x:Name="ListaTarefas"
                  Grid.Row="1"
