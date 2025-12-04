@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System.IO;
+using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -213,4 +214,72 @@ public partial class MainWindow : Window
             ListaTarefas.Items[index] = selecao;
         }
     }
+
+
+private void BtnExportarTxt_Click(object sender, RoutedEventArgs e)
+{
+    if (ListaTarefas.Items.Count == 0)
+    {
+        MessageBox.Show("Não há tarefas para exportar.", "Exportar TXT",
+            MessageBoxButton.OK, MessageBoxImage.Information);
+        return;
+    }
+
+    var dialog = new Microsoft.Win32.SaveFileDialog
+    {
+        FileName = "tarefas.txt",
+        Filter = "Arquivo de texto (*.txt)|*.txt",
+        Title = "Exportar lista de tarefas"
+    };
+
+    if (dialog.ShowDialog() == true)
+    {
+        List<string> linhas = new List<string>();
+
+        foreach (var item in ListaTarefas.Items)
+            linhas.Add(item.ToString());
+
+        File.WriteAllLines(dialog.FileName, linhas, Encoding.UTF8);
+
+        MessageBox.Show("Arquivo salvo com sucesso!", "Exportar TXT",
+            MessageBoxButton.OK, MessageBoxImage.Information);
+    }
 }
+
+
+private void BtnImportarTxt_Click(object sender, RoutedEventArgs e)
+{
+    var dialog = new Microsoft.Win32.OpenFileDialog
+    {
+        Filter = "Arquivo de texto (*.txt)|*.txt",
+        Title = "Importar lista de tarefas"
+    };
+
+    if (dialog.ShowDialog() == true)
+    {
+        try
+        {
+            string[] linhas = File.ReadAllLines(dialog.FileName, Encoding.UTF8);
+
+            foreach (string tarefa in linhas)
+            {
+                if (!string.IsNullOrWhiteSpace(tarefa))
+                {
+                    ListaTarefas.Items.Add(tarefa);
+                    listaTarefas.Add(tarefa);
+                }
+            }
+
+            MessageBox.Show("Tarefas importadas com sucesso!", "Importar TXT",
+                MessageBoxButton.OK, MessageBoxImage.Information);
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show($"Erro ao importar arquivo: {ex.Message}", "Erro",
+                MessageBoxButton.OK, MessageBoxImage.Error);
+        }
+    }
+}
+
+}
+
